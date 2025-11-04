@@ -1,0 +1,39 @@
+// Use IntelliSense to learn about possible attributes.
+// Hover to view descriptions of existing attributes.
+// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Run Sphinx html on docs",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "sphinx",
+      "args": ["-v", "-b", "html", "docs", "_build/html"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+    },
+    {
+      "name": "Run Sphinx ubTrace on docs",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "sphinx",
+      "args": ["-v", "-b", "ubtrace", "docs", "_build/ubtrace"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "ACTION": "ubtrace"
+      },
+      "justMyCode": false
+    }
+  ]
+}

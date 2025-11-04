@@ -1,0 +1,70 @@
+###############################################################################
+# ubTrace Production Setup via docker compose
+# -------------------------------------------
+# For details please read: https://ubtrace.useblocks.com/installation.html
+# Run it via: docker compose up
+#
+# Support via support@useblocks.com
+###############################################################################
+
+services:
+################################
+# UBTRACE SERVER
+################################
+  ubtrace:
+    volumes:
+      - ../../../_build/:/home/useblocks/app/docs/ubtrace/
+    image: ghcr.io/useblocks/ubtrace:latest
+    depends_on:
+      - vis-tree
+      - oidc
+    ports:
+      - "7130:7130"
+    working_dir: /
+    environment:
+      MESSAGE: 🌍 Starting ubTrace on http://localhost:7130
+      PUBLIC_VIS_TREE_HOST: http://localhost:7140
+      UBTRACE_SERVER_VIS_TREE_INTERNAL_HOST: http://vis-tree:7140
+      UBTRACE_SERVER_AUTH_ISSUER_URL: http://localhost:7180
+      UBTRACE_SERVER_AUTH_DISCOVER_URL: http://localhost:7180/.well-known/openid-configuration
+
+################################
+# VIS-TREE
+################################
+  vis-tree:
+    volumes:
+      - ubtrace-data:/home/useblocks/app/docs/ubtrace/
+    image: ghcr.io/useblocks/vis-tree:latest
+    ports:
+      - "7140:7140"
+    depends_on:
+      - oidc
+    working_dir: /app
+    environment:
+      ORG: ${ORG:-useblocks}
+      PROJECT: ${PROJECT:-showcase}
+      VERSION: ${VERSION:-1}
+      MESSAGE: 🌍 Starting Vis-Tree on http://localhost:7140
+      ISSUER: http://oidc:7180
+      CLIENT_ID: ubtrace-client
+      JWKS_URL: http://oidc:7180/.well-known/jwks.json
+      PUBLIC_AUTH_DISABLED: true
+
+################################
+# OIDC Auth server
+################################
+  oidc:
+    image: ghcr.io/useblocks/oidc:latest
+    environment:
+      LOCAL_OIDC_CLIENT_ID: ubtrace-client
+      CORS_ALLOWED_ORIGINS: http://localhost:7130, http://127.0.0.1:7130
+    command: python -m oidc_local_server.app
+    ports:
+      - "7180:8080"
+    working_dir: /app
+
+################################
+# Internal volumes
+################################
+volumes:
+  ubtrace-data:

@@ -107,6 +107,8 @@ if __name__ == "__main__":
     else:
         if action == "incremental":
             builder = "html"
+        elif action == "ubtrace":
+            builder = "ubtrace"
         elif action == "check":
             builder = "needs"
         else:

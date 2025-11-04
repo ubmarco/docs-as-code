@@ -10,6 +10,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
+import os
+
 from sphinx.application import Sphinx
 
 # Note: order matters!
@@ -30,6 +32,10 @@ score_extensions = [
     "needs_config_writer",
     "score_sync_toml",
 ]
+
+
+if os.environ.get("ACTION") == "ubtrace":
+    score_extensions.append("score_ubtrace")
 
 
 def setup(app: Sphinx) -> dict[str, object]:
@@ -65,6 +71,7 @@ def setup(app: Sphinx) -> dict[str, object]:
 
     # Load the actual extensions list
     for e in score_extensions:
+        print(e)
         app.setup_extension(e)
 
     return {
