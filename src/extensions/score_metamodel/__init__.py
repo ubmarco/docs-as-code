@@ -237,10 +237,16 @@ def setup(app: Sphinx) -> dict[str, str | bool]:
     # load metamodel.yaml via ruamel.yaml
     metamodel = load_metamodel_data()
 
+    # prepare extra option dictionaries
+    extra_options = [
+        {"name": opt, "schema": {"type": "string"}}
+        for opt in metamodel.needs_extra_options
+    ]
+
     # Assign everything to Sphinx config
     app.config.needs_types = metamodel.needs_types
     app.config.needs_extra_links = metamodel.needs_extra_links
-    app.config.needs_extra_options = metamodel.needs_extra_options
+    app.config.needs_extra_options = extra_options
     app.config.graph_checks = metamodel.needs_graph_check
     app.config.prohibited_words_checks = metamodel.prohibited_words_checks
 
