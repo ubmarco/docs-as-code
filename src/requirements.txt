@@ -1369,8 +1369,8 @@ sphinx-design==0.6.1 \
     --hash=sha256:b11f37db1a802a183d61b159d9a202314d4d2fe29c163437001324fe2f19549c \
     --hash=sha256:b44eea3719386d04d765c1a8257caca2b3e6f8421d7b3a5e742c0fd45f84e632
     # via -r src/requirements.in
-sphinx-needs[plotting] @ https://github.com/useblocks/sphinx-needs/archive/3a680a7.zip \
-    --hash=sha256:a24eeb2ea7fef5c6aa615d57af4b028aee5db8ec9f6c8030cee62a0c85549e74
+sphinx-needs[plotting] @ https://github.com/useblocks/sphinx-needs/archive/741cde0.zip \
+    --hash=sha256:d3560caa5946e1e78161ff5c0becad28b827058365fafaf75be607f884f44451
     # via
     #   -r src/requirements.in
     #   needs-config-writer

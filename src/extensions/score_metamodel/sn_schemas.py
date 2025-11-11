@@ -40,7 +40,7 @@ def write_sn_schemas(config: Config, metamodel: MetaModelData) -> None:
         validator_local = {
             "properties": {},
             "required": [],
-            "unevaluatedProperties": False,
+            # "unevaluatedProperties": False,
         }
         for field, pattern in mandatory_fields.items():
             validator_local["required"].append(field)
