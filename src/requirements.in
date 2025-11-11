@@ -2,7 +2,10 @@ Sphinx
 
 # At least 4.2.0, as it fixes a bug in combination with esbonio live preview:
 # https://github.com/useblocks/sphinx-needs/issues/1350
-sphinx-needs>=6.1.0
+# sphinx-needs[plotting]>=6.1.0
+
+# include PR https://github.com/useblocks/sphinx-needs/pull/1568
+sphinx-needs[plotting] @ https://github.com/useblocks/sphinx-needs/archive/3a680a7.zip
 
 # Due to needed bugfix in 0.3.1
 sphinx-collections>=0.3.1
@@ -14,7 +17,6 @@ sphinx-autobuild
 ruamel.yaml
 myst-parser
 PyGithub
-sphinx-needs[plotting]
 sphinxcontrib.mermaid
 # Until release of esbonio 1.x, we need to install it ourselves so the VS Code esbonio-extension
 # can find it.
