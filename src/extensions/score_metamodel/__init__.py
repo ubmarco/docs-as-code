@@ -30,6 +30,7 @@ from src.extensions.score_metamodel.metamodel_types import (
 from src.extensions.score_metamodel.metamodel_types import (
     ScoreNeedType as ScoreNeedType,
 )
+from src.extensions.score_metamodel.sn_schemas import write_sn_schemas
 from src.extensions.score_metamodel.yaml_parser import (
     default_options as default_options,
 )
@@ -249,6 +250,9 @@ def setup(app: Sphinx) -> dict[str, str | bool]:
     app.config.needs_build_json = True
     app.config.needs_reproducible_json = True
     app.config.needs_json_remove_defaults = True
+
+    # populate Sphinx-Needs 6 schema definitions
+    write_sn_schemas(app.config, metamodel)
 
     # sphinx-collections runs on default prio 500.
     # We need to populate the sphinx-collections config before that happens.

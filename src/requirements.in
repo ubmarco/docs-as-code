@@ -2,7 +2,7 @@ Sphinx
 
 # At least 4.2.0, as it fixes a bug in combination with esbonio live preview:
 # https://github.com/useblocks/sphinx-needs/issues/1350
-sphinx-needs>=4.2.0
+sphinx-needs>=6.1.0
 
 # Due to needed bugfix in 0.3.1
 sphinx-collections>=0.3.1

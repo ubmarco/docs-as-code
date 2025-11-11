@@ -1,3 +1,9 @@
+
+[server]
+# Whether to run background indexing of the project every time
+# a source document is saved.
+index_on_save = true
+
 [parse.extend_directives.grid]
 argument = true
 options = true
