@@ -252,7 +252,7 @@ def setup(app: Sphinx) -> dict[str, str | bool]:
     app.config.needs_json_remove_defaults = True
 
     # populate Sphinx-Needs 6 schema definitions
-    write_sn_schemas(app.config, metamodel)
+    write_sn_schemas(app, metamodel)
 
     # sphinx-collections runs on default prio 500.
     # We need to populate the sphinx-collections config before that happens.

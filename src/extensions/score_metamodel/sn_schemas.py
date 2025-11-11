@@ -1,3 +1,7 @@
+import json
+from pathlib import Path
+
+from sphinx.application import Sphinx
 from sphinx.config import Config
 
 from src.extensions.score_metamodel.yaml_parser import MetaModelData
@@ -8,7 +12,8 @@ SN_ARRAY_FIELDS = {
 }
 
 
-def write_sn_schemas(config: Config, metamodel: MetaModelData) -> None:
+def write_sn_schemas(app: Sphinx, metamodel: MetaModelData) -> None:
+    config: Config = app.config
     schemas = []
     schema_definitions = {"schemas": schemas}
 
@@ -89,7 +94,13 @@ def write_sn_schemas(config: Config, metamodel: MetaModelData) -> None:
 
         schemas.append(type_schema)
 
-    config.needs_schema_definitions = schema_definitions
+    # Write schema_definitions to JSON file in confdir
+    schemas_output_path = Path(app.confdir) / "schemas.json"
+    with open(schemas_output_path, "w", encoding="utf-8") as f:
+        json.dump(schema_definitions, f, indent=2, ensure_ascii=False)
+
+    config.needs_schema_definitions_from_json = 'schemas.json'
+    # config.needs_schema_definitions = schema_definitions
 
 
 def get_field_pattern_schema(field: str, pattern: str):
