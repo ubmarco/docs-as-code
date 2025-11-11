@@ -85,6 +85,7 @@ def default_options():
         "is_part",
         "is_need",
         "is_external",
+        "is_import",
         "is_modified",
         "modifications",
         "has_dead_links",
