@@ -238,10 +238,20 @@ def setup(app: Sphinx) -> dict[str, str | bool]:
     metamodel = load_metamodel_data()
 
     # prepare extra option dictionaries
-    extra_options = [
+    # non_schema_options = {"source_code_link", "testlink", "codelink"}
+    non_schema_options = {}
+    extra_options_schema = [
         {"name": opt, "schema": {"type": "string"}}
         for opt in metamodel.needs_extra_options
+        if opt not in non_schema_options
     ]
+    extra_options_wo_schema = [
+        {"name": opt}
+        for opt in metamodel.needs_extra_options
+        if opt in non_schema_options
+    ]
+    # extra_options = [{"name": opt} for opt in metamodel.needs_extra_options]
+    extra_options = extra_options_schema + extra_options_wo_schema
 
     # Assign everything to Sphinx config
     app.config.needs_types = metamodel.needs_types

@@ -15,8 +15,8 @@
 needs_types_base_options:
   optional_options:
     # req-Id: tool_req__docs_dd_link_source_code_link
-    source_code_link: ^$|^(https://github.com/.*)
-    testlink: ^$|^https://github.com/.*
+    source_code_link: ^https://github.com/.*
+    testlink: ^https://github.com/.*
     # Custom semantic validation rules
 
 # Prohibited Word Option Checks
@@ -266,7 +266,7 @@ needs_types:
       testcovered: ^(YES|NO)$
       hash: ^.*$
       # req-Id: tool_req__docs_req_attr_validity_correctness
-      valid_from: ^v(0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:\.(0|[1-9][0-9]*))?$
+      valid_from: ^v(0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(\.(0|[1-9][0-9]*))?$
       valid_until: ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(\.(0|[1-9][0-9]*))?$
     tags:
       - requirement

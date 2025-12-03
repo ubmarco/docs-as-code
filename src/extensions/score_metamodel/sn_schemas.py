@@ -3,6 +3,7 @@ from pathlib import Path
 
 from sphinx.application import Sphinx
 from sphinx.config import Config
+from sphinx_needs import logging
 
 from src.extensions.score_metamodel.yaml_parser import MetaModelData
 
@@ -10,6 +11,12 @@ SN_ARRAY_FIELDS = {
     "tags",
     "sections",
 }
+
+IGNORE_FIELDS = {
+    "content",  # not yet available in ubCode
+}
+
+LOGGER = logging.get_logger(__name__)
 
 
 def write_sn_schemas(app: Sphinx, metamodel: MetaModelData) -> None:
@@ -27,6 +34,40 @@ def write_sn_schemas(app: Sphinx, metamodel: MetaModelData) -> None:
             mandatory_fields or optional_fields or mandatory_links or optional_links
         ):
             continue
+
+        mandatory_links_regexes = {}
+        mandatory_links_targets = {}
+        optional_links_regexes = {}
+        optional_links_targets = {}
+        value: str
+        field: str
+        for field, value in mandatory_links.items():
+            link_values = [v.strip() for v in value.split(",")]
+            for link_value in link_values:
+                if link_value.startswith("^"):
+                    if field in mandatory_links_regexes:
+                        LOGGER.error(
+                            "Multiple regex patterns for mandatory link field "
+                            f"'{field}' in need type '{type_name}'. "
+                            "Only the first one will be used in the schema."
+                        )
+                    mandatory_links_regexes[field] = link_value
+                else:
+                    mandatory_links_targets[field] = link_value
+
+        for field, value in optional_links.items():
+            link_values = [v.strip() for v in value.split(",")]
+            for link_value in link_values:
+                if link_value.startswith("^"):
+                    if field in optional_links_regexes:
+                        LOGGER.error(
+                            "Multiple regex patterns for optional link field "
+                            f"'{field}' in need type '{type_name}'. "
+                            "Only the first one will be used in the schema."
+                        )
+                    optional_links_regexes[field] = link_value
+                else:
+                    optional_links_targets[field] = link_value
 
         type_schema = {
             "id": f"need-type-{need_type['directive']}",
@@ -48,47 +89,52 @@ def write_sn_schemas(app: Sphinx, metamodel: MetaModelData) -> None:
             # "unevaluatedProperties": False,
         }
         for field, pattern in mandatory_fields.items():
+            if field in IGNORE_FIELDS:
+                continue
             validator_local["required"].append(field)
             validator_local["properties"][field] = get_field_pattern_schema(
                 field, pattern
             )
         for field, pattern in optional_fields.items():
+            if field in IGNORE_FIELDS:
+                continue
             validator_local["properties"][field] = get_field_pattern_schema(
                 field, pattern
             )
-        for field, pattern in mandatory_links.items():
+        for field, pattern in mandatory_links_regexes.items():
+            validator_local["properties"][field] = {
+                "type": "array",
+                "minItems": 1,
+            }
             validator_local["required"].append(field)
-            if pattern.startswith("^"):
-                validator_local["properties"][field] = get_array_pattern_schema(pattern)
-        for field, pattern in optional_links.items():
-            if pattern.startswith("^"):
-                validator_local["properties"][field] = get_array_pattern_schema(pattern)
+            # validator_local["properties"][field] = get_array_pattern_schema(pattern)
+        for field, pattern in optional_links_regexes.items():
+            validator_local["properties"][field] = {
+                "type": "array",
+            }
+            # validator_local["properties"][field] = get_array_pattern_schema(pattern)
 
         type_schema["validate"]["local"] = validator_local
 
         validator_network = {}
-        for field, pattern in mandatory_links.items():
-            if not pattern.startswith("^"):
-                link_validator = {
-                    "contains": {
-                        "local": {
-                            "properties": {"type": {"type": "string", "const": pattern}}
-                        }
-                    },
-                    "minContains": 1,
-                }
-                validator_network[field] = link_validator
-        for field, pattern in optional_links.items():
-            if not pattern.startswith("^"):
-                link_validator = {
-                    "contains": {
-                        "local": {
-                            "properties": {"type": {"type": "string", "const": pattern}}
-                        },
-                    },
-                    "minContains": 0,
-                }
-                validator_network[field] = link_validator
+        for field, target_type in mandatory_links_targets.items():
+            link_validator = {
+                "items": {
+                    "local": {
+                        "properties": {"type": {"type": "string", "const": target_type}}
+                    }
+                },
+            }
+            # validator_network[field] = link_validator
+        for field, target_type in optional_links_targets.items():
+            link_validator = {
+                "items": {
+                    "local": {
+                        "properties": {"type": {"type": "string", "const": target_type}}
+                    }
+                },
+            }
+            # validator_network[field] = link_validator
         if validator_network:
             type_schema["validate"]["network"] = validator_network
 
@@ -99,7 +145,7 @@ def write_sn_schemas(app: Sphinx, metamodel: MetaModelData) -> None:
     with open(schemas_output_path, "w", encoding="utf-8") as f:
         json.dump(schema_definitions, f, indent=2, ensure_ascii=False)
 
-    config.needs_schema_definitions_from_json = 'schemas.json'
+    config.needs_schema_definitions_from_json = "schemas.json"
     # config.needs_schema_definitions = schema_definitions
 
 

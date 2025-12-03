@@ -5,7 +5,7 @@ Sphinx
 # sphinx-needs[plotting]>=6.1.0
 
 # include PR https://github.com/useblocks/sphinx-needs/pull/1568
-sphinx-needs[plotting] @ https://github.com/useblocks/sphinx-needs/archive/741cde0.zip
+sphinx-needs[plotting] @ https://github.com/useblocks/sphinx-needs/archive/e6802e4a.zip
 
 # Due to needed bugfix in 0.3.1
 sphinx-collections>=0.3.1
