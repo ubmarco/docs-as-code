@@ -49,66 +49,79 @@ id_regex = "^[A-Za-z0-9_-]{6,}$"
 directive = "tsf"
 title = "TSF"
 prefix = "tsf__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "tenet"
 title = "Tenet"
 prefix = "tenet__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "assertion"
 title = "Assertion"
 prefix = "assertion__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "std_req"
 title = "Standard Requirement"
 prefix = "std_req__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "std_wp"
 title = "Standard Work Product"
 prefix = "std_wp__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "workflow"
 title = "Workflow"
 prefix = "wf__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "gd_req"
 title = "Process Requirements"
 prefix = "gd_req__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "gd_temp"
 title = "Process Template"
 prefix = "gd_temp__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "gd_chklst"
 title = "Process Checklist"
 prefix = "gd_chklst__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "gd_guidl"
 title = "Process Guideline"
 prefix = "gd_guidl__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "gd_method"
 title = "Process Method"
 prefix = "gd_meth__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "workproduct"
 title = "Workproduct"
 prefix = "wp__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "role"
 title = "Role"
 prefix = "rl__"
+color = "#E1D5E7"
 
 [[needs.types]]
 directive = "doc_concept"
@@ -134,104 +147,122 @@ prefix = "doc_tool__"
 directive = "stkh_req"
 title = "Stakeholder Requirement"
 prefix = "stkh_req__"
+color = "#DAE8FC"
 
 [[needs.types]]
 directive = "feat_req"
 title = "Feature Requirement"
 prefix = "feat_req__"
+color = "#FFF2CC"
 style = "node"
 
 [[needs.types]]
 directive = "comp_req"
 title = "Component Requirement"
 prefix = "comp_req__"
+color = "#D5E8D4"
 
 [[needs.types]]
 directive = "tool_req"
 title = "Tool Requirement"
 prefix = "tool_req__"
+color = "#F5F5F5"
 
 [[needs.types]]
 directive = "aou_req"
 title = "Assumption of Use Requirement"
 prefix = "aou_req__"
+color = "#FCFCFC"
 
 [[needs.types]]
 directive = "feat"
 title = "Feature"
 prefix = "feat__"
+color = "#FFF2CC"
 style = "card"
 
 [[needs.types]]
 directive = "feat_arc_sta"
 title = "Feature & Feature Package Diagram"
 prefix = "feat_arc_sta__"
+color = "#FFF2CC"
 style = "card"
 
 [[needs.types]]
 directive = "feat_arc_dyn"
 title = "Feature Sequence Diagram"
 prefix = "feat_arc_dyn__"
+color = "#FFF2CC"
 style = "card"
 
 [[needs.types]]
 directive = "logic_arc_int"
 title = "Logical Interface & Feature Interface View"
 prefix = "logic_arc_int__"
+color = "#FFF2CC"
 style = "card"
 
 [[needs.types]]
 directive = "logic_arc_int_op"
 title = "Logical Interface Operation"
 prefix = "logic_arc_int_op__"
+color = "#FFF2CC"
 style = "card"
 
 [[needs.types]]
 directive = "mod"
 title = "Module"
 prefix = "mod__"
+color = "#D5E8D4"
 style = "card"
 
 [[needs.types]]
 directive = "mod_view_sta"
 title = "Module Architecture Static View"
 prefix = "mod_view_sta__"
+color = "#D5E8D4"
 style = "card"
 
 [[needs.types]]
 directive = "mod_view_dyn"
 title = "Module Architecture Dynamic View"
 prefix = "mod_view_dyn__"
+color = "#D5E8D4"
 style = "card"
 
 [[needs.types]]
 directive = "comp"
 title = "Component"
 prefix = "comp__"
+color = "#D5E8D4"
 style = "card"
 
 [[needs.types]]
 directive = "comp_arc_sta"
 title = "Component Package Diagram"
 prefix = "comp_arc_sta__"
+color = "#D5E8D4"
 style = "card"
 
 [[needs.types]]
 directive = "comp_arc_dyn"
 title = "Component Sequence Diagram"
 prefix = "comp_arc_dyn__"
+color = "#D5E8D4"
 style = "card"
 
 [[needs.types]]
 directive = "real_arc_int"
 title = "Interface & Component Interface"
 prefix = "real_arc_int__"
+color = "#D5E8D4"
 style = "card"
 
 [[needs.types]]
 directive = "real_arc_int_op"
 title = "Interface Operation"
 prefix = "real_arc_int_op__"
+color = "#D5E8D4"
 style = "card"
 
 [[needs.types]]
@@ -240,57 +271,80 @@ title = "Review Header"
 prefix = "review_header__"
 
 [[needs.types]]
-directive = "dd_sta"
-title = "Static detailed design"
-prefix = "dd_sta__"
-style = "card"
-
-[[needs.types]]
-directive = "dd_dyn"
-title = "Dynamic detailed design"
-prefix = "dd_dyn__"
-style = "card"
-
-[[needs.types]]
-directive = "sw_unit"
-title = "Software unit"
-prefix = "sw_unit__"
-
-[[needs.types]]
-directive = "sw_unit_int"
-title = "Software unit interface"
-prefix = "sw_unit_int__"
-style = "card"
-
-[[needs.types]]
 directive = "plat_saf_dfa"
 title = "Platform Dependent Failure Analysis"
 prefix = "plat_saf_dfa__"
+color = "#DAE8FC"
 
 [[needs.types]]
 directive = "feat_saf_dfa"
 title = "Feature DFA (Dependent Failure Analysis)"
 prefix = "feat_saf_dfa__"
+color = "#FFF2CC"
 
 [[needs.types]]
 directive = "comp_saf_dfa"
 title = "Component DFA (Dependent Failure Analysis)"
 prefix = "comp_saf_dfa__"
+color = "#D5E8D4"
 
 [[needs.types]]
 directive = "feat_saf_fmea"
 title = "Feature FMEA (Failure Mode and Effects Analysis)"
 prefix = "feat_saf_fmea__"
+color = "#FFF2CC"
 
 [[needs.types]]
 directive = "comp_saf_fmea"
 title = "Component FMEA (Failure Mode and Effects Analysis)"
 prefix = "comp_saf_fmea__"
+color = "#D5E8D4"
+
+[[needs.types]]
+directive = "feat_sec_threat"
+title = "Feature Security Analysis Threat (STRIDE)"
+prefix = "feat_sec_threat__"
+color = "#FFF2CC"
+
+[[needs.types]]
+directive = "comp_sec_threat"
+title = "Component Security Analysis Threat (STRIDE)"
+prefix = "comp_sec_threat__"
+color = "#D5E8D4"
+
+[[needs.types]]
+directive = "plat_sec_threat"
+title = "Platform Security Analysis Threat (STRIDE)"
+prefix = "plat_sec_threat__"
+color = "#DAE8FC"
+
+[[needs.types]]
+directive = "feat_sec_ana"
+title = "Feature Security Analysis (Threat Scenario)"
+prefix = "feat_sec_ana__"
+color = "#FFF2CC"
+
+[[needs.types]]
+directive = "comp_sec_ana"
+title = "Component Security Analysis (Threat Scenario)"
+prefix = "comp_sec_ana__"
+color = "#D5E8D4"
+
+[[needs.types]]
+directive = "plat_sec_ana"
+title = "Platform Security Analysis (Threat Scenario)"
+prefix = "plat_sec_ana__"
+color = "#DAE8FC"
 
 [[needs.types]]
 directive = "testcase"
 title = "Testcase Needs parsed from test.xml files"
 prefix = "testcase__"
+
+[[needs.types]]
+directive = "mod_ver_report"
+title = "Module Verification Report"
+prefix = "mod_vrep__"
 
 [[needs.types]]
 directive = "dec_rec"
@@ -302,6 +356,9 @@ prefix = "dec_rec__"
 # sphinx-needs built-in option names. ubc's fields are global (not per-type), so a
 # per-type mandatory/optional distinction is not representable here; every custom
 # option used anywhere becomes an optional string field.
+[needs.fields.applies_to_module_version]
+schema.type = "string"
+
 [needs.fields.approver]
 schema.type = "string"
 
@@ -311,7 +368,7 @@ schema.type = "string"
 [needs.fields.author]
 schema.type = "string"
 
-[needs.fields.codelink]
+[needs.fields.branch_coverage_percent]
 schema.type = "string"
 
 [needs.fields.consequences]
@@ -350,6 +407,9 @@ schema.type = "string"
 [needs.fields.line]
 schema.type = "string"
 
+[needs.fields.line_coverage_percent]
+schema.type = "string"
+
 [needs.fields.mitigation_issue]
 schema.type = "string"
 
@@ -365,10 +425,10 @@ schema.type = "string"
 [needs.fields.rationale]
 schema.type = "string"
 
-[needs.fields.reqcovered]
+[needs.fields.reqtype]
 schema.type = "string"
 
-[needs.fields.reqtype]
+[needs.fields.requirements_tests_completely_passed_percent]
 schema.type = "string"
 
 [needs.fields.result]
@@ -383,10 +443,16 @@ schema.type = "string"
 [needs.fields.reviewers]
 schema.type = "string"
 
+[needs.fields.root_cause]
+schema.type = "string"
+
 [needs.fields.safety]
 schema.type = "string"
 
 [needs.fields.safety_affected]
+schema.type = "string"
+
+[needs.fields.safety_relevant]
 schema.type = "string"
 
 [needs.fields.security]
@@ -413,13 +479,28 @@ schema.type = "string"
 [needs.fields.testlink]
 schema.type = "string"
 
+[needs.fields.threat_effect]
+schema.type = "string"
+
+[needs.fields.threat_id]
+schema.type = "string"
+
+[needs.fields.threat_scenario_id]
+schema.type = "string"
+
+[needs.fields.tool_version]
+schema.type = "string"
+
+[needs.fields.tracking]
+schema.type = "string"
+
 [needs.fields.valid_from]
 schema.type = "string"
 
 [needs.fields.valid_until]
 schema.type = "string"
 
-[needs.fields.version]
+[needs.fields.verification_method]
 schema.type = "string"
 
 # Link types, derived from needs_extra_links in metamodel.yaml (plus any link name
@@ -460,9 +541,13 @@ outgoing = "complies"
 incoming = "realized by"
 outgoing = "realizes"
 
-[needs.links.satisfies]
-incoming = "satisfied by"
-outgoing = "satisfies"
+[needs.links.affects]
+incoming = "affected by"
+outgoing = "affects"
+
+[needs.links.derived_from]
+incoming = "derives"
+outgoing = "derived from"
 
 [needs.links.covers]
 incoming = "covered by"
@@ -475,6 +560,14 @@ outgoing = "consists of"
 [needs.links.belongs_to]
 incoming = "has"
 outgoing = "belongs to"
+
+[needs.links.satisfied_by]
+incoming = "satisfies"
+outgoing = "satisfied by"
+
+[needs.links.satisfies]
+incoming = "satisfied by"
+outgoing = "satisfies"
 
 [needs.links.fulfils]
 incoming = "fulfilled by"
@@ -501,7 +594,7 @@ incoming = "includes"
 outgoing = "included by"
 
 [needs.links.mitigated_by]
-incoming = "mititages"
+incoming = "mitigates"
 outgoing = "mitigated_by"
 
 [needs.links.violates]
@@ -516,9 +609,9 @@ outgoing = "fully_verifies"
 incoming = "partially_verified_by"
 outgoing = "partially_verifies"
 
-[needs.links.affects]
-incoming = "affects_back"
-outgoing = "affects"
+[needs.links.evidence]
+incoming = "evidence_for"
+outgoing = "evidence"
 
 # ===== END GENERATED =====
 [lint]
