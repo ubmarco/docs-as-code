@@ -10,7 +10,14 @@ user.bazelrc
 
 # docs build artifacts
 _build/
-ubproject.toml
+# NOTE (ubtn branch): docs/ubproject.toml is intentionally NOT ignored here
+# (upstream ignores it). needs-config-writer (src/extensions/score_sync_toml)
+# regenerates it as a side effect of any Sphinx/Bazel docs build, which is
+# why it is ignored upstream -- but ubtrace-native's `ubc build html docs`
+# needs a checked-in, standalone copy (see tools/ubtn/).
+# tools/ubtn/ubtrace-prepare.sh restores the checked-in copy after
+# `bazel run //:docs_check` runs, so that regeneration never leaks into a
+# real ubtn build.
 
 # tools/module_verification_reports.py downstream repository checkouts
 /.cache/
