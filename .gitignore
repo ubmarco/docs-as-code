@@ -18,6 +18,12 @@ _build/
 # tools/ubtn/ubtrace-prepare.sh restores the checked-in copy after
 # `bazel run //:docs_check` runs, so that regeneration never leaks into a
 # real ubtn build.
+#
+# The ROOT-level copy needs-config-writer also emits stays ignored, though
+# (upstream's unanchored `ubproject.toml` entry covered both; this branch
+# needs only the docs/ one tracked): anchored with a leading slash so it
+# matches the generated root artifact and nothing else.
+/ubproject.toml
 
 # ubtn: score_process_description's needs.json, materialized into the tree by
 # tools/ubtn/ubtrace-prepare.sh (see docs/ubproject.toml [[needs.external_needs]]
