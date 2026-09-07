@@ -19,6 +19,12 @@ _build/
 # `bazel run //:docs_check` runs, so that regeneration never leaks into a
 # real ubtn build.
 
+# ubtn: score_process_description's needs.json, materialized into the tree by
+# tools/ubtn/ubtrace-prepare.sh (see docs/ubproject.toml [[needs.external_needs]]
+# and tools/ubtn/README.md) -- a runtime artifact copied fresh from Bazel's
+# output on every prepare run, not source.
+docs/_ubtn_external/
+
 # tools/module_verification_reports.py downstream repository checkouts
 /.cache/
 

@@ -55,6 +55,18 @@ if [ "${UBTN_SKIP_BAZEL:-0}" = "1" ]; then
     log "# produced this way as validated; this is for local ubc-only"
     log "# iteration ONLY. Unset UBTN_SKIP_BAZEL before a real build."
     log "############################################################"
+    if [ ! -f "${REPO_ROOT}/docs/_ubtn_external/process_needs.json" ]; then
+        log "############################################################"
+        log "# WARNING: docs/_ubtn_external/process_needs.json does not exist,"
+        log "# and UBTN_SKIP_BAZEL=1 skips the bazel step that would materialize"
+        log "# it. External process needs (gd_req__*/gd_guidl__*/std_req__*/...)"
+        log "# will be MISSING from this build; the docs/ubproject.toml"
+        log "# [[needs.external_needs]] entry will not resolve, and"
+        log "# needs.dead_link warnings for :satisfies:/:need: references into"
+        log "# process_description will reappear. The build proceeds anyway --"
+        log "# this is expected for local ubc-only iteration."
+        log "############################################################"
+    fi
     exit 0
 fi
 
@@ -147,3 +159,63 @@ if [ "${docs_check_status}" -ne 0 ]; then
 fi
 
 log "docs_check passed."
+
+# --- materialize score_process_description's external needs into the tree ---
+#
+# docs/ubproject.toml's [[needs.external_needs]] "json_path" is a LOCAL file
+# path (relative to docs/). Bazel would happily hand us
+# bazel-bin/external/score_process_description+/needs.json, but bazel-bin
+# (like every other bazel-* convenience symlink, and bazel-out underneath it)
+# is a symlink pointing OUTSIDE this worktree, into Bazel's output_base / disk
+# cache. That is fine for a `ubc build html docs` run immediately afterwards
+# in the SAME container (the symlink target still exists) -- but
+# ubtrace-native tars this tree into a snapshot that is restored on Lambda,
+# where that symlink target does not exist. The resident LSP preview/query
+# would then silently lose every gd_req__*/gd_guidl__*/std_req__*/...
+# external need. So: resolve the real file via Bazel and copy the actual
+# bytes into the tree, rather than leaving a path that only resolves here.
+EXTERNAL_NEEDS_DIR="${REPO_ROOT}/docs/_ubtn_external"
+EXTERNAL_NEEDS_JSON="${EXTERNAL_NEEDS_DIR}/process_needs.json"
+EXTERNAL_NEEDS_TARGET="@score_process_description//:needs_json_file"
+
+mkdir -p "${EXTERNAL_NEEDS_DIR}"
+
+needs_json_rel=""
+if needs_json_rel="$(
+    cd "${REPO_ROOT}"
+    export USE_BAZEL_VERSION
+    USE_BAZEL_VERSION="$(cat .bazelversion 2>/dev/null || true)"
+    "${BAZEL_BIN}" cquery --output=files "${EXTERNAL_NEEDS_TARGET}" 2>/dev/null | tail -n1
+)" && [ -n "${needs_json_rel}" ]; then
+    # cquery only resolves the label to its would-be output path; make sure
+    # the action has actually run so the file exists on disk (usually a
+    # no-op cache hit, since docs_check already built it as a dependency).
+    (
+        cd "${REPO_ROOT}"
+        export USE_BAZEL_VERSION
+        USE_BAZEL_VERSION="$(cat .bazelversion 2>/dev/null || true)"
+        "${BAZEL_BIN}" build "${EXTERNAL_NEEDS_TARGET}" >/dev/null 2>&1
+    ) || true
+fi
+
+if [ -n "${needs_json_rel}" ] && [ -f "${REPO_ROOT}/${needs_json_rel}" ]; then
+    cp -f "${REPO_ROOT}/${needs_json_rel}" "${EXTERNAL_NEEDS_JSON}"
+    log "materialized external process needs: ${needs_json_rel} -> docs/_ubtn_external/process_needs.json ($(wc -c <"${EXTERNAL_NEEDS_JSON}") bytes)"
+elif [ -f "${EXTERNAL_NEEDS_JSON}" ]; then
+    log "############################################################"
+    log "# WARNING: could not re-resolve ${EXTERNAL_NEEDS_TARGET} via 'bazel"
+    log "# cquery' this run -- keeping the previously materialized"
+    log "# docs/_ubtn_external/process_needs.json as-is (it may be stale)."
+    log "############################################################"
+else
+    log "############################################################"
+    log "# WARNING: could not resolve/build ${EXTERNAL_NEEDS_TARGET}."
+    log "# docs/_ubtn_external/process_needs.json is MISSING -- external"
+    log "# process needs (gd_req__*/gd_guidl__*/std_req__*/...) will be"
+    log "# absent from this build; needs.dead_link warnings for :satisfies:/"
+    log "# :need: references into process_description will reappear. The"
+    log "# build proceeds anyway; externals are just missing."
+    log "############################################################"
+fi
+
+step "external process needs materialized"

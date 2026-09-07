@@ -41,6 +41,43 @@ id_required = true
 # (tsf__, wf__, tool_req__, ...) would fail.
 id_regex = "^[A-Za-z0-9_-]{6,}$"
 
+# docs/internals/requirements/process_overview.rst and requirements.rst carry
+# needtable views filtered on process-need types (gd_req, ...) that were
+# effectively empty before external needs were wired in below. With them
+# wired, one such view now matches all 177 gd_req__* needs and hits ubc's
+# default view cap (100), truncating with `build.need_view_truncated` --
+# uncapped so those tables render completely, matching what they were
+# authored to show.
+views_max_items = 0
+
+# External needs: S-CORE's process description (gd_req__*/gd_guidl__*/std_req__*/
+# std_wp__*/workflow__*/workproduct__*/...) is defined in the separate
+# eclipse-score/process_description repo, not in this fork. Upstream feeds it into
+# sphinx-needs via Bazel: BUILD's `docs(external_needs =
+# ["@score_process_description//:needs_json_file"])`, backed by MODULE.bazel's
+# `bazel_dep(name = "score_process_description", version = "2.1.2")`. Upstream never
+# mounts process_description's *pages* here (its `bundles` list has no
+# process_description entry, unlike e.g. the metamodel/extensions bundles below) --
+# only the needs.json is consumed, and links resolve to the externally-hosted site via
+# base_url. src/extensions/score_metamodel/external_needs.py builds that base_url as
+# `needs_json_data["project_url"] + "/main"`; since project_url itself already ends in
+# "/" (verified against the built needs.json), that literally produces
+# ".../process_description//main" with a doubled slash in the upstream-generated
+# ubproject.toml -- corrected to a single slash here since we hand-author this entry
+# rather than replaying the generator's string concatenation.
+#
+# ubtrace-prepare.sh materializes that JSON into docs/_ubtn_external/process_needs.json
+# after `bazel run //:docs_check` (bazel-bin/bazel-out are symlinks OUT of this
+# worktree -- see the script's comments -- so the file is copied in, not referenced via
+# a path that only resolves in this container, to survive ubtrace-native's
+# snapshot/restore round trip). No id_prefix: process_description's own IDs already
+# carry their type prefixes, and this fork defines no local needs of the same types
+# (verified: no `.. gd_req::`/`.. std_req::`/... directives exist under docs/), so there
+# is no collision to disambiguate.
+[[needs.external_needs]]
+json_path = "_ubtn_external/process_needs.json"
+base_url = "https://eclipse-score.github.io/process_description/main"
+
 # ===== BEGIN GENERATED (tools/ubtn/metamodel_to_ubproject.py) - do not edit below by hand =====
 # Regenerate with: python3 tools/ubtn/metamodel_to_ubproject.py
 
@@ -615,16 +652,27 @@ outgoing = "evidence"
 
 # ===== END GENERATED =====
 [lint]
-# This fork only carries eclipse-score/docs-as-code, not the separate
-# eclipse-score "process_description" repo that defines the gd_req__*/
-# gd_guidl__* process needs the tool_req__* needs here link to via
-# `:satisfies:`/`:need:`. Every one of those cross-repo references is
-# necessarily unresolved in ubc's index (no [needs.external_needs] source is
-# configured for it -- wiring that up is out of scope for this port), so
-# `needs.dead_link` (unknown link target) and `needs.link_ref` (unknown role
-# id) fire ~100 times on IDs that intentionally live outside this repo. See
-# tools/ubtn/README.md "Known gaps".
-ignore = ["needs.dead_link", "needs.link_ref"]
+# `needs.dead_link`/`needs.link_ref` used to be ignored here (~130 hits) because
+# the ~100 tool_req__* needs' `:satisfies:`/`:need:` references into the separate
+# eclipse-score "process_description" repo (gd_req__*/gd_guidl__*/...) were
+# unresolved -- no [needs.external_needs] source was configured for it. Now that
+# docs/_ubtn_external/process_needs.json is wired in as
+# `[[needs.external_needs]]` (see above), those references resolve and both
+# codes no longer fire -- verified with `ubc check docs --output-format json -c
+# 'lint.ignore = []'` (0 hits, down from 127 + 4).
+#
+# What's genuinely still needed: process_description's own needs.json links
+# some of *its* needs to each other with sphinx-needs' version-conditioned link
+# syntax (e.g. `wf__cr_mt_comparch[version==1]` in a `satisfies`/`realizes`/...
+# field) -- a versioning feature ubc's schema does not model (no `version`
+# field is declared anywhere in this project's [needs.fields.*], nor does ubc
+# special-case it for external sources). That is entirely process_description's
+# own internal linkage, not this repo's content, and not something we can fix
+# from here -- it fires `needs.external` once (declaring the dropped `version`
+# key) and `needs.link_condition_invalid` ~1290 times (one per version-
+# conditioned link between two external needs). See tools/ubtn/README.md
+# "Known gaps".
+ignore = ["needs.link_condition_invalid", "needs.external"]
 
 [scripts]
 ubtrace-prepare = "bash ../tools/ubtn/ubtrace-prepare.sh"
